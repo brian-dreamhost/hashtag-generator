@@ -19,7 +19,7 @@ export default function HashtagTier({ tier, label, description, tags, selected, 
             <button
               key={tag}
               onClick={() => onToggle(tag)}
-              className={`text-sm px-3 py-1 rounded-full border transition-all ${
+              className={`text-sm px-3 py-2 min-h-[44px] rounded-full border transition-all focus:outline-none focus:ring-2 focus:ring-azure focus:ring-offset-2 focus:ring-offset-abyss ${
                 isSelected
                   ? `${colors.badge} font-medium`
                   : 'border-metal/30 text-galactic hover:text-white hover:border-metal/60'
