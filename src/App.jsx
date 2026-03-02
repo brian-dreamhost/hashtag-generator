@@ -80,6 +80,12 @@ export default function App() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const fillTestData = useCallback(() => {
+    setTopicInput('vegan meal prep for beginners')
+    setPlatform('instagram')
+    setContentType('educational')
+  }, [])
+
   const handleGenerate = useCallback(() => {
     if (!topicInput.trim()) return
     const result = generateHashtags(topicInput, platform, contentType)
@@ -169,6 +175,17 @@ export default function App() {
           <p className="text-cloudy text-base sm:text-lg max-w-2xl mx-auto">
             Type any topic and get 30-50 hashtags organized by estimated reach, with an interactive set builder and platform-specific strategy.
           </p>
+        </div>
+
+        {/* Fill Test Data */}
+        <div className="flex justify-end mb-4">
+          <button
+            type="button"
+            onClick={fillTestData}
+            className="px-3 py-1.5 text-xs font-mono bg-prince/20 text-prince border border-prince/30 rounded hover:bg-prince/30 transition-colors focus:outline-none focus:ring-2 focus:ring-prince focus:ring-offset-2 focus:ring-offset-abyss"
+          >
+            Fill Test Data
+          </button>
         </div>
 
         {/* Controls */}
