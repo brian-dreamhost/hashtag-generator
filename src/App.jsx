@@ -145,6 +145,18 @@ export default function App() {
     }
   }, [selected, currentPlatform])
 
+  const closeRelatedPanel = useCallback(() => {
+    setRelatedTag(null)
+  }, [])
+
+  const clearSelected = useCallback(() => {
+    setSelected([])
+  }, [])
+
+  const removeFromSelected = useCallback((tag) => {
+    setSelected(prev => prev.filter(t => t !== tag))
+  }, [])
+
   // Count selected per tier
   const selectedCounts = { high: 0, medium: 0, niche: 0, micro: 0 }
   if (generated) {
@@ -156,7 +168,7 @@ export default function App() {
 
   return (
     <div className="bg-glow bg-grid min-h-screen">
-      <div className="relative z-10 max-w-5xl mx-auto px-4 py-8 sm:py-12">
+      <div className="relative z-10 max-w-[1600px] mx-auto px-4 py-8 sm:py-12">
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm text-galactic">
           <a href="https://seo-tools-tau.vercel.app/" className="text-azure hover:text-white transition-colors">Free Tools</a>
@@ -300,7 +312,7 @@ export default function App() {
 
         {/* Results */}
         {generated && generated.total > 0 && (
-          <div className="flex flex-col gap-6 animate-fadeIn">
+          <div className="flex flex-col gap-6">
             {/* Strategy panel */}
             <StrategyPanel platform={currentPlatform} selectedCount={selected.length} />
 
@@ -326,12 +338,12 @@ export default function App() {
               <p className="text-sm text-galactic">
                 Click hashtags to add them to your set. Hover to see related tags. Mix tiers for the best reach-to-relevance ratio.
               </p>
-              {TIER_CONFIG.map(tier => {
+              {TIER_CONFIG.map((tier, index) => {
                 const tags = generated[tier.key] || []
                 if (tags.length === 0) return null
                 return (
+                  <div key={tier.key} className="animate-slideUp" style={{ animationDelay: `${index * 0.08}s` }}>
                   <HashtagTier
-                    key={tier.key}
                     tier={tier.key}
                     label={tier.label}
                     description={tier.description}
@@ -342,6 +354,7 @@ export default function App() {
                     onHover={handleTagHover}
                     colors={tier.colors}
                   />
+                  </div>
                 )
               })}
             </div>
@@ -353,7 +366,7 @@ export default function App() {
                 related={relatedTag.related}
                 selected={selected}
                 onAdd={addRelatedTag}
-                onClose={() => setRelatedTag(null)}
+                onClose={closeRelatedPanel}
               />
             )}
 
@@ -361,8 +374,8 @@ export default function App() {
             <SelectedSet
               selected={selected}
               platform={currentPlatform}
-              onClear={() => setSelected([])}
-              onRemove={(tag) => setSelected(prev => prev.filter(t => t !== tag))}
+              onClear={clearSelected}
+              onRemove={removeFromSelected}
             />
           </div>
         )}
